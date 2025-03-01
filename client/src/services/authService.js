@@ -5,7 +5,11 @@ const API_URL = "http://localhost:3001"; // Reemplázalo por tu API
 export const loginUser = async (email, password) => {
   try {
     const response = await axios.post(`${API_URL}/login`, { email, password });
-    return response.data; // Devuelve el token y la info del usuario
+    if (response.data?.user && response.data?.token) {
+      return response.data; // Devuelve el token y la info del usuario
+    } else {
+      throw new Error("Datos de autenticación incompletos");
+    }
   } catch (error) {
     console.error("Error en el login:", error);
     throw error;
@@ -15,7 +19,11 @@ export const loginUser = async (email, password) => {
 export const registerUser = async (name, lastName, email, password) => {
   try {
     const response = await axios.post(`${API_URL}/register`, { name, lastName, email, password });
-    return response.data; // Devuelve la info del usuario
+    if (response.data) {
+      return response.data; // Devuelve el token y la info del usuario
+    } else {
+      throw new Error("Datos de registro incompletos");
+    }
   } catch (error) {
     console.error("Error en el registro:", error);
     throw error;
@@ -36,7 +44,11 @@ export const getPokemons = async (search) => {
       },
     });
 
-    return response.data;
+    if (response.data) {
+      return response.data; // Devuelve el token y la info del usuario
+    } else {
+      throw new Error("No hay datos del pokemon");
+    }
   } catch (error) {
     console.error("Error en getPokemons:", error.response || error.message || error);
     throw error;
@@ -56,8 +68,12 @@ export const getPokemonById = async (searchId) => {
         "Content-Type": "application/json",
       },
     });
-
-    return response.data;
+    
+    if (response.data) {
+      return response.data; // Devuelve el token y la info del usuario
+    } else {
+      throw new Error("No hay datos del pokemon");
+    }
   } catch (error) {
     console.error("Error en getPokemons:", error.response || error.message || error);
     throw error;

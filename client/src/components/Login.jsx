@@ -15,8 +15,13 @@ const Login = () => {
     e.preventDefault();
     try {
       const data = await loginUser(email, password);
-      dispatch(login({ user: data.user, token: data.token }));
-      navigate("/pokemon"); // Redirige al usuario a /pokemon
+
+      if (data?.user && data?.token) {
+        dispatch(login({ user: data?.user, token: data?.token }));
+        navigate("/pokemon");
+      } else {
+        alert("Respuesta del servidor no válida");
+      }
     } catch (error) {
       alert("Credenciales incorrectas");
     }

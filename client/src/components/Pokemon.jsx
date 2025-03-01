@@ -17,6 +17,10 @@ const Pokemon = () => {
     navigate("/login");
   };
 
+  if (!user) {
+    navigate("/login");
+  }
+
   const handleSearch = async () => {
     setSearchId("");
     if (!search.trim()) {

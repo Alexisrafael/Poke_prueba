@@ -12,11 +12,14 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     login: (state, action) => {
-      state.user = action.payload.user;
-      state.token = action.payload.token;
-      state.isAuthenticated = true;
-      localStorage.setItem("Use", JSON.stringify(action.payload.user));
-      localStorage.setItem("token", action.payload.token);
+      console.log("Action en login:", action);
+      if (action.payload) {
+        state.user = action.payload.user || null;
+        state.token = action.payload.token || null;
+        state.isAuthenticated = true;
+        localStorage.setItem("Use", JSON.stringify(action.payload.user));
+        localStorage.setItem("token", action.payload.token);
+      }
     },
     loadUser: (state) => {
       const storedUser = localStorage.getItem("Use");
@@ -33,8 +36,10 @@ const authSlice = createSlice({
       localStorage.removeItem("token");
     },
     register: (state, action) => {
-      state.user = action.payload.user;
-      state.isAuthenticated = true;
+      if (action.payload) {
+        state.user = action.payload.user || null;
+        state.isAuthenticated = true;
+      }
     },
     setPokemons: (state, action) => {
       state.pokemons = action.payload.pokemon;
