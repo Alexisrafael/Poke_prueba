@@ -15,15 +15,14 @@ async function updateBase(req, res) {
       image: e.sprites?.other?.["official-artwork"]?.front_default || "https://res.cloudinary.com/dgo96kikm/image/upload/v1741629938/pngegg_kyiqwt.png",
       id: e.id,
       name: e.name,
-      attack: e.stats[1].base_stat,
-      life: e.stats[0].base_stat,
-      defense: e.stats[2].base_stat,
-      speed: e.stats[5].base_stat,
-      specialAttack: e.stats[3].base_stat,
-      specialDefense: e.stats[4].base_stat,
+      attack: e.stats[1]?.base_stat,
+      life: e.stats[0]?.base_stat,
+      defense: e.stats[2]?.base_stat,
+      speed: e.stats[5]?.base_stat,
+      specialAttack: e.stats[3]?.base_stat,
+      specialDefense: e.stats[4]?.base_stat,
       height: e.height,
       weight: e.weight,
-      image: e.sprites?.front_default || e.sprites?.front_shiny,
       types: e?.types?.map(t => t?.type?.name)
     }));
 
