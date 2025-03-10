@@ -10,11 +10,11 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate(); // Hook para redireccionar
 
-
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
       const data = await loginUser(email, password);
+      console.log(data)
 
       if (data?.user && data?.token) {
         dispatch(login({ user: data?.user, token: data?.token }));

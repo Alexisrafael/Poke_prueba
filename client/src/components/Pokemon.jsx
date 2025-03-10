@@ -54,6 +54,7 @@ const Pokemon = () => {
   };
 
   useEffect(() => {
+    console.log(loadUser())
     dispatch(loadUser()); 
   }, [dispatch]);
 
@@ -85,17 +86,18 @@ const Pokemon = () => {
         </section>
         <section>
           <div style={{ display: "flex", justifyContent: "center" }}>
-            <h3>Resultado/s</h3>
+            <h3>{pokemons?.length > 0 ? pokemons?.length : ""} Resultado/s</h3>
           </div>
           <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", alignItems: "stretch" }}>
             {pokemons.length > 0 ? (
               pokemons.map((poke) => (
-                <div key={poke.id} style={{ width: "20%", margin: "1%", padding: "1%", borderRadius: "5px", boxShadow: "0 0 5px rgb(0, 0, 0)" }}>
+                <div key={poke.id} style={{ width: "20%", margin: "1%", padding: "1%", borderRadius: "5px", boxShadow: "0 0 5px rgb(0, 0, 0)", backgroundColor: "rgb(201, 200, 169)" }}>
                   <div>
                     <label><b>ID:</b> {poke.identificate}</label>
                   </div>
+
                   <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                    <img style={{ width: "70%" }} src={poke.image} alt={poke.name} />
+                    <img style={{ width: "70%", filter: "drop-shadow(5px 5px 10px rgba(0, 0, 0, 0.54))" }} src={poke.image} alt={poke.name} />
                     <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
                     <label><b>{poke.name.toUpperCase()}</b></label>
                   </div>

@@ -17,12 +17,12 @@ const authSlice = createSlice({
         state.user = action.payload.user || null;
         state.token = action.payload.token || null;
         state.isAuthenticated = true;
-        localStorage.setItem("Use", JSON.stringify(action.payload.user));
+        localStorage.setItem("user", JSON.stringify(action.payload.user));
         localStorage.setItem("token", action.payload.token);
       }
     },
     loadUser: (state) => {
-      const storedUser = localStorage.getItem("Use");
+      const storedUser = localStorage.getItem("user");
       if (storedUser) {
         state.user = JSON.parse(storedUser);
         state.isAuthenticated = true;
@@ -32,7 +32,7 @@ const authSlice = createSlice({
       state.user = null;
       state.token = null;
       state.isAuthenticated = false;
-      localStorage.removeItem("Use");
+      localStorage.removeItem("user");
       localStorage.removeItem("token");
     },
     register: (state, action) => {
@@ -42,14 +42,14 @@ const authSlice = createSlice({
       }
     },
     setPokemons: (state, action) => {
-      state.pokemons = action.payload.pokemon;
+      state.pokemons = action?.payload?.pokemon || [];
 
     },
     setPokemonById: (state, action) => {
-      state.pokemons = action.payload;
+      state.pokemons = action?.payload || [];
     }
   },
 });
-
+console.log("Estado inicial de Auth:", initialState);
 export const { login, logout, register, setPokemons, setPokemonById, loadUser  } = authSlice.actions;
 export default authSlice.reducer;

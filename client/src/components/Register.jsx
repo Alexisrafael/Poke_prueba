@@ -23,14 +23,18 @@ const Register = () => {
     e.preventDefault();
     try {
       const data = await registerUser(form.name, form.lastName, form.email, form.password);
-      
-      dispatch(register({ user: data.user })); // Actualiza Redux
-      
-      alert(`Usuario registrado con éxito con el correo: ${form.email}`);
+      if(data?.user){
+        dispatch(register({ user: data.user })); // Actualiza Redux
+        
+        alert(`Usuario registrado con éxito con el correo: ${form.email}`);
+  
+        setForm({ name: "", lastName: "", email: "", password: "" }); // Limpia el formulario
+  
+        navigate("/login"); // Redirige después del registro
+      }else{
+        alert("Error en el registro de usuario.");
+      }
 
-      setForm({ name: "", lastName: "", email: "", password: "" }); // Limpia el formulario
-
-      navigate("/login"); // Redirige después del registro
     } catch (error) {
       alert("Error en el registro");
     }
