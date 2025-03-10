@@ -37,8 +37,7 @@ const authSlice = createSlice({
     },
     register: (state, action) => {
       if (action.payload) {
-        state.user = action.payload.user || null;
-        state.isAuthenticated = true;
+        state.user = action.payload.user ? `${action.payload.user.name} ${action.payload.user.lastName}` : null;
       }
     },
     setPokemons: (state, action) => {
