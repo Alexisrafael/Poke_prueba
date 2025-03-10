@@ -4,7 +4,7 @@ const {Pokemon, Type} = require("../db");
 //Metodo encargado de cargar la base de datos con los pokemones
 async function updateBase(req, res) {
   try {
-    let allPokemons = (await axios("https://pokeapi.co/api/v2/pokemon?limit=1301")).data.results;
+    let allPokemons = (await axios("https://pokeapi.co/api/v2/pokemon?limit=1304")).data.results;
 
     const dataApi = await Promise.all(allPokemons.map(async e => {
       const pokemon = (await axios(e.url)).data;
@@ -12,7 +12,7 @@ async function updateBase(req, res) {
     }));
 
     const pokemonFinal = dataApi.map(e => ({
-      image: e.sprites?.other?.["official-artwork"]?.front_default,
+      image: e.sprites?.other?.["official-artwork"]?.front_default || "https://res.cloudinary.com/dgo96kikm/image/upload/v1741629938/pngegg_kyiqwt.png",
       id: e.id,
       name: e.name,
       attack: e.stats[1].base_stat,
@@ -32,6 +32,7 @@ async function updateBase(req, res) {
         where: { name: p.name },
         defaults: {
           life: p.life,
+          identificate: p.id,
           attack: p.attack,
           defense: p.defense,
           speed: p.speed,
