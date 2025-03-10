@@ -6,14 +6,31 @@ async function updateBase(req, res) {
   try {
     let allPokemons = (await axios("https://pokeapi.co/api/v2/pokemon?limit=1304")).data.results;
 
-    const dataApi = await Promise.all(allPokemons.map(async e => {
-      const pokemon = (await axios(e.url)).data;
-      return pokemon;
-    }));
+    const MAX_CONCURRENT_REQUESTS = 50;
+    const dataApi = [];
+
+    // Crear lotes de solicitudes para evitar sobrecarga
+    for (let i = 0; i < allPokemons.length; i += MAX_CONCURRENT_REQUESTS) {
+      const chunk = allPokemons.slice(i, i + MAX_CONCURRENT_REQUESTS);
+
+      // Hacer solicitudes en lotes
+      const promises = chunk.map(async e => {
+        try {
+          const pokemon = (await axios(e.url)).data;
+          return pokemon;
+        } catch (err) {
+          console.error(`Error fetching ${e.url}: ${err.message}`);
+          return null; // Manejar errores sin detener el proceso
+        }
+      });
+
+      const results = await Promise.all(promises);
+      dataApi.push(...results.filter(e => e)); // Eliminar nulos en caso de error
+    }
 
     const pokemonFinal = dataApi.map(e => ({
-      image: e.sprites?.other?.["official-artwork"]?.front_default || "https://res.cloudinary.com/dgo96kikm/image/upload/v1741629938/pngegg_kyiqwt.png",
-      id: e.id,
+      image: (e.sprites?.other?.["official-artwork"]?.front_default != null ? e.sprites?.other?.["official-artwork"]?.front_default : "https://res.cloudinary.com/dgo96kikm/image/upload/v1741629938/pngegg_kyiqwt.png"),
+      identificate: e.id,
       name: e.name,
       attack: e.stats[1]?.base_stat,
       life: e.stats[0]?.base_stat,
@@ -30,8 +47,8 @@ async function updateBase(req, res) {
       const [newPokemon] = await Pokemon.findOrCreate({
         where: { name: p.name },
         defaults: {
+          identificate: p.identificate,
           life: p.life,
-          identificate: p.id,
           attack: p.attack,
           defense: p.defense,
           speed: p.speed,
@@ -52,6 +69,7 @@ async function updateBase(req, res) {
     }
     res.send(pokemonFinal);
   } catch (error) {
+    console.log(error.message)
     res.status(404).json({ error: error.message });
   }
 }
