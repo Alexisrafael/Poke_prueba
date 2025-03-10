@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:3001"; // Reemplázalo por tu API
+const API_URL = process.env.API ? process.env.API : "http://localhost:3001"; // Reemplázalo por tu API
 
 export const loginUser = async (email, password) => {
   try {
